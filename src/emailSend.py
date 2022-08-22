@@ -1,4 +1,5 @@
 import configMgr
+from PySimpleGUI import popup as popup
 def sendEmail(score, beat_high_score, difficulty, speed_snake, snake_pos, food_pos, food_spawn, direction, change_to):
     from mailer import Mailer
 
@@ -22,8 +23,16 @@ def sendEmail(score, beat_high_score, difficulty, speed_snake, snake_pos, food_p
 
     """
 
-    mail = Mailer(email=configMgr.getEmail(), password=configMgr.getEmailPass())
-    mail.send(receiver=configMgr.getEmail(), subject=subject, message=body)
+    try:
+        mail = Mailer(email=configMgr.getEmail(), password=configMgr.getEmailPass())
+        mail.send(receiver=configMgr.getEmail(), subject=subject, message=body)
+
+    except Exception as e:
+        print(e)
+        popup("email send failed - check your internet connection - and make sure you have a valid email address and pass in the config file\n\nThis window will close in 5 seconds", keep_on_top=True, grab_anywhere=True, background_color="red", text_color="white" ,no_titlebar=True, auto_close=True, auto_close_duration=5, button_type=5)
+        return None
+
+
 
 
 

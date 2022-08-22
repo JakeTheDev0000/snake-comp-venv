@@ -4,7 +4,7 @@ import pygame, sys, time, random
 import emailSend, launcher, configMgr
 from PySimpleGUI import popup as popup
  
-def snakePlay():
+def snakePlay(loop=False, practice=False):
     # Difficulty settings
     # Easy      ->  10
     # Medium    ->  25
@@ -101,13 +101,19 @@ def snakePlay():
         game_window.blit(game_over_surface, game_over_rect)
 
 
-        emailSend.sendEmail(score, True, difficulty, speed_snake, snake_pos, food_pos, food_spawn, direction, change_to)
+        if practice == False:
+            emailSend.sendEmail(score, True, difficulty, speed_snake, snake_pos, food_pos, food_spawn, direction, change_to)
+        else:
+            pass
+        pygame.display.flip()
         print("Your score was: ", score)
         show_score(0, red, 'times', 20)
-        pygame.display.flip()
         time.sleep(2)
-        pygame.quit()
-        launcher.main()
+        if loop == True:
+            snakePlay()
+        else:        
+            pygame.quit()
+            launcher.main()
     print("game over set up")
 
     # Score
