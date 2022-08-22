@@ -1,19 +1,29 @@
- 
-#snakecompetition.messycode@gmail.com
-#JakeWillWin321
-#xnzlyhckerojwmnk
-def sendEmail(score, beat_high_score, difficulty, speed_snake, snake_pos, food_pos, food_spawn, direction, change_to, username):
+import configMgr
+def sendEmail(score, beat_high_score, difficulty, speed_snake, snake_pos, food_pos, food_spawn, direction, change_to):
     from mailer import Mailer
 
     if beat_high_score == True:
-        subject = "New High Score! " + 'Score: ' + str(score) + ' - ' + str(username)
+        subject = "New High Score! " + 'Score: ' + str(score) + ' - ' + str(configMgr.getUsername())
     else:
-        subject = "Game Over! " + '-----  Score: ' + str(score) + ' - ' + str(username)
+        subject = "Game Over! " + '-----  Score: ' + str(score) + ' - ' + str(configMgr.getUsername())
     # subject = 'Score - ' + str(score) + ' - ' + str(username)
-    body = 'Score: ' + str(score) + ' Difficulty: ' + str(difficulty) + ' Speed: ' + str(speed_snake) + ' pos1: ' + str(snake_pos[0]) + ' pos2: ' + str(snake_pos[1]) + ' food_pos1: ' + str(food_pos[0]) + ' food_pos2: ' + str(food_pos[1]) + ' food_spawn: ' + str(food_spawn) + ' direction: ' + str(direction) + ' change_to: ' + str(change_to) + ' username: ' + str(username)
+    body = """
+    Score: """ + str(score) + """
+    Difficulty: """ + str(difficulty) + """
+    Speed: """ + str(speed_snake) + """
+    Snake Position: """ + str(snake_pos) + """
+    Food Position: """ + str(food_pos) + """
+    Food Spawn: """ + str(food_spawn) + """
+    Direction: """ + str(direction) + """
+    Change To: """ + str(change_to) + """
 
-    mail = Mailer(email='snakecompetition.messycode@gmail.com', password='xnzlyhckerojwmnk')
-    mail.send(receiver='snakecompetition.messycode@gmail.com', subject=subject, message=body)
+    Username: """ + str(configMgr.getUsername()) + """
+    Snake Name: """ + str(configMgr.getSnakeName()) + """
+
+    """
+
+    mail = Mailer(email=configMgr.getEmail(), password=configMgr.getEmailPass())
+    mail.send(receiver=configMgr.getEmail(), subject=subject, message=body)
 
 
 

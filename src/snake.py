@@ -1,7 +1,8 @@
-username = "Jakeplays0000"
+# username = "Jakeplays0000"
 
 import pygame, sys, time, random
-import emailSend, launcher
+import emailSend, launcher, configMgr
+from PySimpleGUI import popup as popup
  
 def snakePlay():
     # Difficulty settings
@@ -10,13 +11,16 @@ def snakePlay():
     # Hard      ->  40
     # Harder    ->  60
     # Impossible->  120
-    difficulty = 30
-    speed_snake = 10
+    difficulty = int(configMgr.getDifficulty())
+    speed_snake = int(configMgr.getSpeedSnake())
 
     # Window size
-    frame_size_x = 1920
-    frame_size_y = 1080
+    frame_size_x = int(configMgr.get_frame_size_x())
+    frame_size_y = int(configMgr.get_frame_size_y())
     # in case of fullscreen
+
+    print("frame_size_x: " + str(frame_size_x))
+    print("frame_size_y: " + str(frame_size_y))
 
 
     #fullscreen
@@ -39,8 +43,17 @@ def snakePlay():
 
     # Initialise game window
     pygame.display.set_caption('Snake Eater')
+    if configMgr.getFullscreen() == "True":
+        game_window = pygame.display.set_mode((frame_size_x, frame_size_y), pygame.FULLSCREEN)
+    elif configMgr.getFullscreen() == "False":
+        game_window = pygame.display.set_mode((frame_size_x, frame_size_y))
+    else:
+        print("fullscreen config error")
+        popup("fullscreen config error")
+        launcher.main()
+
     # game_window = pygame.display.set_mode((frame_size_x, frame_size_y))
-    game_window = pygame.display.set_mode((frame_size_x, frame_size_y), pygame.FULLSCREEN)
+    # game_window = pygame.display.set_mode((frame_size_x, frame_size_y), pygame.FULLSCREEN)
 
     print("setting up game window complete")
     print("hideing mouse")
@@ -80,19 +93,19 @@ def snakePlay():
     print("setting up game over")
     def game_over():
         my_font = pygame.font.SysFont('times new roman', 90)
-        game_over_surface = my_font.render('Email Sending', True, red)
+        game_over_surface = my_font.render(configMgr.getUsername() + " killed " + configMgr.getSnakeName(), True, red)
         game_over_rect = game_over_surface.get_rect()
         game_over_rect.midtop = (frame_size_x/2, frame_size_y/4)    
 
-        game_window.fill(black)
+        game_window.fill(pygame.Color(0, 0, 0))
         game_window.blit(game_over_surface, game_over_rect)
 
 
-        emailSend.sendEmail(score, True, difficulty, speed_snake, snake_pos, food_pos, food_spawn, direction, change_to, username)
+        emailSend.sendEmail(score, True, difficulty, speed_snake, snake_pos, food_pos, food_spawn, direction, change_to)
         print("Your score was: ", score)
         show_score(0, red, 'times', 20)
         pygame.display.flip()
-        time.sleep(0.5)
+        time.sleep(2)
         pygame.quit()
         launcher.main()
     print("game over set up")
@@ -120,9 +133,9 @@ def snakePlay():
     print("setting up main game loop")
     def show_vars(choice, color, font, size):
         score_font = pygame.font.SysFont(font, size)
-        score_surface = score_font.render('Difficulty: ' + str(difficulty) + ' Speed: ' + str(speed_snake) + ' pos1: ' + str(snake_pos[0]) + ' pos2: ' + str(snake_pos[1]), True, color)
+        score_surface = score_font.render('Difficulty: ' + str(difficulty) + ' Speed: ' + str(speed_snake) + ' pos1: ' + str(snake_pos[0]) + ' pos2: ' + str(snake_pos[1]) + ' Fps: ' + str(int(fps_controller.get_fps())), True, color)
         score_rect = score_surface.get_rect()
-        if choice == 1:
+        if choice == 10:
             score_rect.midtop = (frame_size_x/10, 15)
         else:
             score_rect.midtop = (frame_size_x/2, frame_size_y/1.25)
