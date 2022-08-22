@@ -1,7 +1,7 @@
 no spaces after the colon (:)
 username:Jakeplays0000
 email:snakecompetition.messycode@gmail.com
-emailPass:xnzlyhckerojwmnk
+emailPass:xnzlyhckerojwmnkk
 frame_size_x:1920
 frame_size_y:1080
 fullscreen:True
