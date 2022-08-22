@@ -1,10 +1,10 @@
 no spaces after the colon (:)
-username:Jakeplays0000
-email:snakecompetition.messycode@gmail.com
-emailPass:xnzlyhckerojwmnkk
+username:
+email:
+emailPass:
 frame_size_x:1920
 frame_size_y:1080
 fullscreen:True
 difficulty:45
 speedSnake:10
-snakeName:Wormhole Eater
+snakeName:
